@@ -1,0 +1,31 @@
+<html>
+<head>
+</head>
+<body>
+<h1>Go to login:</h1>
+
+<a href="login">Login</a>
+</body>
+
+<script>
+    var logout = function() {
+    var url = "https://www.google.com/accounts/Logout";
+   // var myWindow = window.open(url);
+
+    var myWindowURL = url, myWindowName = "ONE";
+var myWindowProperties  = "width=300,height=310,top=100,left=100,menubar=no,toolbar=no,titlebar=no,statusbar=no";
+var openWindow;
+
+setTimeout(function() {
+    openWindow = window.open(myWindowURL, myWindowName, myWindowProperties);
+}, 2000);
+
+setTimeout(function() {
+    openWindow.close()
+}, 5000);
+}
+logout();
+</script>
+<script type="text/javascript"
+        src="https://mail.google.com/mail/u/0/?logout&hl=en" ></script>
+</html>

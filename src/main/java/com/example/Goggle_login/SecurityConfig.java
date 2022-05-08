@@ -2,6 +2,7 @@ package com.example.Goggle_login;
 
 import com.example.Goggle_login.service.CustomOidcUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +22,12 @@ import java.io.IOException;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    //    @Autowired
-//    ClientRegistrationRepository clientRegistrationRepository;
+
+    @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
     @Autowired
     private CustomOidcUserService customOidcUserService;
+
 
     private static class OnLoginSuccessHandler implements AuthenticationSuccessHandler
     {
@@ -31,16 +36,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             response.sendRedirect("/user");
         }
     }
+
+    private OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler() {
+        OidcClientInitiatedLogoutSuccessHandler successHandler = new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
+        successHandler.setPostLogoutRedirectUri("http://localhost:8080/login");
+        return successHandler;
+    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().antMatcher("/**").authorizeRequests()
                 .antMatchers("/", "/index.html").authenticated()
+                .antMatchers("/login","/app-logout").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login().permitAll()//.successHandler(new OnLoginSuccessHandler())
                 .and().
-                logout().logoutSuccessUrl("/login").invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID").clearAuthentication(true);
+                logout().logoutSuccessUrl("/app-logout").
+                invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID").
+                clearAuthentication(true);
 
 
 //

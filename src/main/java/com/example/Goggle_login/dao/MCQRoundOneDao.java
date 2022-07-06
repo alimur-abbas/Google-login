@@ -37,9 +37,7 @@ public class MCQRoundOneDao {
     private static final String SELECT_EXAM_MODEL = "SELECT * FROM TBL_EXAMINATION WHERE EXAM_CODE=?";
     private static final String SELECT_QUESTION_MODEL = "SELECT * FROM TBL_QUESTION WHERE EXAM_ID=?";
     private static final String SELECT_OPTION_MODEL = "SELECT * FROM TBL_OPTION WHERE QUESTION_ID=?";
-    private static final String SELECT_QUESTION_RESULT = "SELECT T1.QUESTION_ID ,T1.ANSWER_LABEL AS A1, T2.ANSWER_LABEL AS A2 , STRCMP(T1.ANSWER_LABEL, T2.ANSWER_LABEL) AS RESULT" +
-            " FROM TBL_QUESTION T1 LEFT JOIN TBL_USER_ANSWER T2" +
-            " ON T1.QUESTION_ID = T2.QUESTION_ID";
+    private static final String SELECT_QUESTION_RESULT = "SELECT T1.QUESTION_ID ,T1.ANSWER_LABEL AS A1, T2.ANSWER_LABEL AS A2 , STRCMP(T1.ANSWER_LABEL, T2.ANSWER_LABEL) AS RESULT FROM TBL_QUESTION T1 LEFT JOIN TBL_USER_ANSWER T2 ON T1.QUESTION_ID = T2.QUESTION_ID AND T2.ATTEMPT_ID=?";
     private static final String UPDATE_TBL_ATTEMPT = "UPDATE TBL_USER_ATTEMPT SET RESULT =? , SCORE =? WHERE ATTEMPT_ID =?";
     private static final String GET_RESULT_DETAIL = "SELECT USER_ACCOUNT_ID,ATTEMPT_ID,RESULT,SCORE FROM TBL_USER_ATTEMPT WHERE ATTEMPT_ID = ?";
 
@@ -125,7 +123,8 @@ public class MCQRoundOneDao {
 
     public List<UserExamResult> viewUserResult(UserResultQueryRequest ua) throws JsonProcessingException {
         int count = 0;
-        List<UserQuestionResult> list = jdbcTemplate.query(SELECT_QUESTION_RESULT, new ResultMapper());
+        Object[] attempt = new Object[]{ua.getAttemptId()};
+        List<UserQuestionResult> list = jdbcTemplate.query(SELECT_QUESTION_RESULT, new ResultMapper(),attempt);
        // userExamResult.setQuestionResults(list);
         for (UserQuestionResult uq : list) {
             if (uq.getResult() == 0 && uq.getUserSubmittedAnswerLabel() != null ) {

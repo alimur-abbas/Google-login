@@ -44,20 +44,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().antMatcher("/**").authorizeRequests()
+        http.authorizeRequests()
+                .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/", "/index.html").authenticated()
                 .antMatchers("/login","/app-logout").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login().permitAll()//.successHandler(new OnLoginSuccessHandler())
                 .and().
+//                formLogin().successForwardUrl("http://localhost:4200/welcome").and().
                 logout().logoutSuccessUrl("/app-logout").
                 invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID").
                 clearAuthentication(true);
+        http.cors();
 
 
-//
+// csrf().disable().cors().and().antMatcher("/**")
 //        http
 //                .authorizeRequests()
 //                .antMatchers("/","/index.html").permitAll()

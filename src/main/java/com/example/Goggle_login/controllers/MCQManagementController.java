@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-
+@CrossOrigin("http://localhost:4200")
 @RestController
 public class MCQManagementController {
     @Autowired
@@ -19,11 +19,13 @@ public class MCQManagementController {
     @GetMapping("/read-csv")
     public void readCsv() throws IOException {
         List<ExaminationModel> list = mcqRoundOneModelService.readCsv();
+        System.out.println("executed");
         mcqRoundOneModelService.save(list.get(0));
     }
 
     @GetMapping("/detail/{exam_code}")
     public ResponseEntity<UserExamAttemptWrapper> getModel(@PathVariable String exam_code) {
+        System.out.println("hii");
         ExaminationModel ex = mcqRoundOneModelService.getExamModel(exam_code);
         UserExamAttempt userExamAttempt = mcqRoundOneModelService.saveAttempt(ex.getExaminationId());
         List<QuestionModel> list = mcqRoundOneModelService.getQuestionModel(ex.getExaminationId());

@@ -1,5 +1,6 @@
 package com.example.Goggle_login.controllers;
 
+import com.example.Goggle_login.dao.LoginDaoImpl;
 import com.example.Goggle_login.model.*;
 import com.example.Goggle_login.service.MCQRoundOneModelService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,13 +9,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin("http://localhost:4200")
 @RestController
 public class MCQManagementController {
     @Autowired
     private MCQRoundOneModelService mcqRoundOneModelService;
+    @Autowired
+    private LoginDaoImpl loginDao;
 
     @GetMapping("/read-csv")
     public void readCsv() throws IOException {
@@ -52,6 +57,14 @@ public class MCQManagementController {
     public ResponseEntity<List<UserExamResult>> userResult(@RequestBody UserResultQueryRequest ur) throws JsonProcessingException {
         List<UserExamResult> result = mcqRoundOneModelService.getUserResult(ur);
         return ResponseEntity.ok(result);
+    }
+    @GetMapping("/validate/jwt")
+    public Map<String,String> getParams(@RequestParam("uuid") String uuid){
+        Map<String,String> map = new HashMap();
+        JwtToken jwtToken = loginDao.getTokenFromUuid(uuid);
+        System.out.println(uuid);
+        map.put("token", jwtToken.getToken());
+        return map;
     }
 
 

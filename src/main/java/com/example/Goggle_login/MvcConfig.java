@@ -19,23 +19,10 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/app-logout").setViewName("logout-page");
     }
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedMethods("*")
-                       // .allowedOrigins("http://localhost:8080/oauth2/authorization/google")
-                        .allowedOrigins("http://localhost:4200")
-                        .allowedOrigins("http://localhost:8080")
-                        .allowedHeaders("Access-Control-Allow-Origin","http://localhost:8080");
-            }
-        };
+
     }
 //    @Bean
 //    public int  doFilter(HttpServletResponse response)throws IOException, ServletException {
 //        response.addHeader("Access-Control-Allow-Origin", "*");
 //        return 0;
 //    }
-}

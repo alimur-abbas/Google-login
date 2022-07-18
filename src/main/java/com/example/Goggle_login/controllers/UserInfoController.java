@@ -1,17 +1,20 @@
 package com.example.Goggle_login.controllers;
 
+import com.example.Goggle_login.SecurityConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
-
 @RestController
 public class UserInfoController {
+
 
     @GetMapping("/user")
     public Map getUserInfo()
@@ -21,6 +24,6 @@ public class UserInfoController {
     }
     @GetMapping("/")
     void redirect(HttpServletResponse response) throws IOException {
-        response.sendRedirect("http://localhost:4200/welcome");
+        response.sendRedirect("http://localhost:4200/welcome?uuid="+SecurityConfig.getUuid());
     }
 }

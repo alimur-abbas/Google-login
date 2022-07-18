@@ -1,7 +1,9 @@
 package com.example.Goggle_login.service;
 
 import com.example.Goggle_login.dao.LoginDaoImpl;
+import com.example.Goggle_login.jwt.JwtUtilToken;
 import com.example.Goggle_login.model.GoogleUserInfo;
+import com.example.Goggle_login.model.JwtToken;
 import com.example.Goggle_login.model.UserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -13,11 +15,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
+
+
 
 @Service
 public class CustomOidcUserService extends OidcUserService {
     @Autowired
     private LoginDaoImpl loginDao;
+
+
+
 
 
     @Override
@@ -31,15 +39,16 @@ public class CustomOidcUserService extends OidcUserService {
         }
     }
 
+
     private OidcUser processOidcUser(OidcUserRequest userRequest, OidcUser oidcUser) {
         UserDetail userDetailFromDao=null;
         GoogleUserInfo googleUserInfo = new GoogleUserInfo(oidcUser.getAttributes());
         System.out.println(googleUserInfo.getEmail());
         System.out.println(googleUserInfo.getName());
         System.out.println(googleUserInfo.getId());
-        System.out.println(oidcUser.getAttributes());
-        System.out.println(oidcUser.getIdToken());
-        System.out.println(oidcUser.getClaims());
+//        System.out.println(oidcUser.getAttributes());
+//        System.out.println(oidcUser.getIdToken());
+//        System.out.println(oidcUser.getClaims());
 
 
             try {
@@ -53,6 +62,7 @@ public class CustomOidcUserService extends OidcUserService {
             userDetail.setUserName(googleUserInfo.getName());
             userDetail.setId(googleUserInfo.getId());
 
+
             loginDao.save(userDetail);
         } else{
             System.out.println("User Exist with Email: "+googleUserInfo.getEmail());
@@ -60,4 +70,14 @@ public class CustomOidcUserService extends OidcUserService {
 
         return oidcUser;
     }
+    public JwtToken getToken(String uuid){
+      return   loginDao.getTokenFromUuid(uuid);
+    }
+//    private UserDetail getUserDetail(){
+//        UserDetail userDetail= new UserDetail();
+//        userDetail.setEmail(googleUserInfo.getEmail());
+//        userDetail.setUserName(googleUserInfo.getName());
+//        userDetail.setId(googleUserInfo.getId());
+//        return userDetail;
+//    }
 }

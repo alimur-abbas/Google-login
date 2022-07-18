@@ -20,6 +20,7 @@ public class MCQRoundOneModelService {
     @Autowired
     private MCQRoundOneDao mcqRoundOneDao;
 
+
     private static final String CSV_FILE_PATH = "C:\\Users\\Alimur\\Desktop\\SpringBoot\\mcq-round-1\\src\\main\\resources\\mcq.csv";
 
     public List<ExaminationModel> readCsv() throws IOException {
@@ -126,4 +127,6 @@ public class MCQRoundOneModelService {
     public List<UserExamResult> getUserResult(UserResultQueryRequest userResultQueryRequest) throws JsonProcessingException {
         return mcqRoundOneDao.viewUserResult(userResultQueryRequest);
     }
+
+
 }

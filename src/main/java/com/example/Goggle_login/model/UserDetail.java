@@ -3,6 +3,7 @@ package com.example.Goggle_login.model;
 public class UserDetail {
     private String email;
     private String userName;
+    private String id;
 
     public String getEmail() {
         return email;
@@ -28,5 +29,5 @@ public class UserDetail {
         this.id = id;
     }
 
-    private String id;
+
 }

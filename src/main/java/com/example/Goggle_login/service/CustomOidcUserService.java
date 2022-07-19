@@ -37,6 +37,9 @@ public class CustomOidcUserService extends OidcUserService {
         System.out.println(googleUserInfo.getEmail());
         System.out.println(googleUserInfo.getName());
         System.out.println(googleUserInfo.getId());
+        System.out.println(oidcUser.getAttributes());
+        System.out.println(oidcUser.getIdToken());
+        System.out.println(oidcUser.getClaims());
 
 
             try {

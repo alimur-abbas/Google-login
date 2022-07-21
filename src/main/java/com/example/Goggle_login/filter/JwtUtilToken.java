@@ -1,4 +1,4 @@
-package com.example.Goggle_login.jwt;
+package com.example.Goggle_login.filter;
 
 import com.example.Goggle_login.model.UserDetail;
 import io.jsonwebtoken.Claims;
@@ -18,22 +18,22 @@ import java.util.function.Function;
 @Component
 public class JwtUtilToken {
     @Value("${jwt.secret}")
-    private static String secret;
+    private  String secret;
 
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
-    public static String generateToken(String userName) {
+    public  String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
         return doGenerateToken(claims, userName);
     }
-    private static String doGenerateToken(Map<String, Object> claims, String subject) {
+    private  String doGenerateToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, UserDetail userDetail) {
         final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetail.getUserName()) && !isTokenExpired(token));
     }
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
@@ -42,6 +42,9 @@ public class JwtUtilToken {
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
+
+
+
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }

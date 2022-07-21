@@ -1,5 +1,6 @@
 package com.example.Goggle_login.config;
 
+import com.example.Goggle_login.filter.JwtTokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,10 @@ public class DatabaseConfig {
         d.setUsername(username);
         d.setPassword(password);
         return d;
+    }
+    @Bean
+    public JwtTokenAuthenticationFilter createJwtTokenAuthenticationFilter(){
+        return new JwtTokenAuthenticationFilter();
     }
 
 }

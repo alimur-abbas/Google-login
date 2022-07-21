@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin
 @RestController
 public class MCQManagementController {
     @Autowired
@@ -49,6 +49,7 @@ public class MCQManagementController {
 
     @PostMapping("/save-user-answer")
     public ResponseEntity<UserAnswerModel> createUserAnswer(@RequestBody UserAnswerModel ua) {
+        System.out.println("/save-user-answer");
         mcqRoundOneModelService.saveUserAnswer(ua);
         return ResponseEntity.ok(ua);
     }
@@ -63,6 +64,7 @@ public class MCQManagementController {
         Map<String,String> map = new HashMap();
         JwtToken jwtToken = loginDao.getTokenFromUuid(uuid);
         System.out.println(uuid);
+        System.out.println(jwtToken.getToken());
         map.put("token", jwtToken.getToken());
         return map;
     }
